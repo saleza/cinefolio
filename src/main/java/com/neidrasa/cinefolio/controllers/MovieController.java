@@ -1,7 +1,7 @@
 package com.neidrasa.cinefolio.controllers;
 
 import com.neidrasa.cinefolio.models.Movie;
-import com.neidrasa.cinefolio.services.TmdbAPI;
+import com.neidrasa.cinefolio.services.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,29 +15,40 @@ import java.util.List;
 @RequestMapping("/movies")
 public class MovieController {
 
-    private final TmdbAPI tmdbAPI;
+    private final MovieService movieService;
 
     @Autowired
-    public MovieController(TmdbAPI tmdbAPI) {
-        this.tmdbAPI = tmdbAPI;
+    public MovieController(MovieService movieService) {
+        this.movieService = movieService;
     }
 
-  /*  @GetMapping("/title")
-    public String getMovieTitle() {
-        try {
-            return tmdbAPI.getMovieData();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Erreur lors de la récupération des données du film";
-        }
+    @GetMapping("/title")
+    public List<Movie> getMovieByTitle(@RequestParam(defaultValue = "") String title,
+                                     @RequestParam(defaultValue = "1") int page) throws IOException, InterruptedException {
+        return movieService.searchByTitle(title, page);
+
     }
-*/
+
     @GetMapping
     public List<Movie> getAllMovies(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "popularity.desc") String sortBy) throws IOException, InterruptedException{
+            @RequestParam(defaultValue = "1") int page) throws IOException, InterruptedException{
         System.out.println("COUCOU JE SUIS UN ENDPOINT!");
-        return tmdbAPI.getAllMovies(page, size, sortBy);
+        return movieService.getAllMovies(page);
+    }
+
+    @GetMapping("/latest")
+    public List<Movie> getLatestMovies(@RequestParam(defaultValue = "1") int page) throws IOException, InterruptedException {
+        return movieService.getLatestMovies(page);
+    }
+
+    @GetMapping("/popular")
+    public List<Movie> getPopularMovies(@RequestParam(defaultValue = "1") int page) throws IOException, InterruptedException {
+        return movieService.getPopularMovies(page);
+    }
+
+    @GetMapping("/genres")
+    public List<Movie> searchByGenre(@RequestParam String[] genre,
+                                     @RequestParam(defaultValue = "1") int page) throws IOException, InterruptedException {
+        return movieService.searchByGenre(genre, page);
     }
 }

@@ -10,12 +10,10 @@ import lombok.Data;
 @Entity
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Movie {
+public class Genre {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String title;
-    private String overview;
-    private String release_date;
+    private int id;
+    private String name;
 }
