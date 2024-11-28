@@ -19,10 +19,12 @@ public class MovieService {
 
     private final ApiCaller apiCaller;
     private final GenreService genreService;
+    private final ProviderService providerService;
 
-    public MovieService(ApiCaller apiCaller, GenreService genreService) {
+    public MovieService(ApiCaller apiCaller, GenreService genreService, ProviderService providerService) {
         this.apiCaller = apiCaller;
         this.genreService = genreService;
+        this.providerService = providerService;
     }
 
     public List<Movie> getAllMovies(int page) throws IOException, InterruptedException {
@@ -80,5 +82,20 @@ public class MovieService {
         // Appeler l'API pour récupérer les films
         MovieApiResponse movieResponse = apiCaller.fetchFromApi(endpoint, MovieApiResponse.class);
         return movieResponse.getResults();
+    }
+
+    public List<Movie> searchByProvider(String[] provider, int page) throws IOException, InterruptedException {
+        List<Integer> providerIds = providerService.findProviderIdByName(provider);
+
+        String endpoint = "discover/movie?include_adult=false&include_video=false&language=fr-FR&watch_region=FR"
+                +"&page=" + page
+                +"&with_watch_providers="
+                + String.join("%2C",
+                providerIds.stream()
+                        .map(String::valueOf)
+                        .toList());
+
+        MovieApiResponse movieApiResponse = apiCaller.fetchFromApi(endpoint, MovieApiResponse.class);
+        return movieApiResponse.getResults();
     }
 }

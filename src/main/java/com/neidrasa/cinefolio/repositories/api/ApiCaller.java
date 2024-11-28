@@ -36,7 +36,7 @@ public class ApiCaller {
 
         // Étape 3 : Envoyer la requête et récupérer la réponse
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("Réponse de l'API: " + response.body());
+        //System.out.println("Réponse de l'API: " + response.body());
 
         // Étape 4 : Mapper la réponse JSON en objet Java du type demandé (responseType)
         ObjectMapper objectMapper = new ObjectMapper();

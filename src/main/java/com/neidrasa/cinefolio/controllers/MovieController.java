@@ -51,4 +51,12 @@ public class MovieController {
                                      @RequestParam(defaultValue = "1") int page) throws IOException, InterruptedException {
         return movieService.searchByGenre(genre, page);
     }
+
+    @GetMapping("/providers")
+    public List<Movie> searchByProvider(@RequestParam String[] provider,
+                                        @RequestParam(defaultValue = "1") int page) throws IOException, InterruptedException {
+        return movieService.searchByProvider(provider, page);
+    }
+
+
 }

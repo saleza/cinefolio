@@ -34,8 +34,8 @@ public class GenreService {
         return Arrays.stream(genreNames) // Convertit le tableau en un flux pour les traiter un par un
                 .map(name -> // Applique cette opération pour chaque nom de genre dans le flux :
                         genres.stream() // Parcourt la liste des genres disponibles
-                        .filter(genre -> genre.getName().equalsIgnoreCase(name)) // Cherche celui qui correspond au nom (insensible à la casse)
-                        .map(Genre::getId) // Une fois trouvé, prend son ID
+                        .filter(genre -> genre.getName().equalsIgnoreCase(name)) // Cherche celui qui correspond au nom (insensible à la casse) La fonction dans .filter est appelée une lambda !
+                        .map(Genre::getId) // Une fois trouvé, prend son ID : Appelle la méthode getId() sur chaque élément de type Genre dans le flux.
                         .findFirst()
                         .orElseThrow(() -> new IllegalArgumentException("Genre Introuvable : " + name))
                 )
